@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="app-name">Note Maker</div>
+      <div className="app-name">MAKE NOTES</div>
       <div className="app-search-box">
         <input
           className="app-search-input"
