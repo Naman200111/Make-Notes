@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
+import FetchAllNotes from "./components/fetch-all-notes";
+import { updateNotesInDb } from "./utils";
 import "./app.css";
 
 const App = () => {
@@ -13,8 +15,7 @@ const App = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      // add note to the db
-      // note value is makeNote and priority is priority
+      updateNotesInDb(makeNote, priority);
       setMakeNote("");
     }
   };
@@ -44,7 +45,7 @@ const App = () => {
         </div>
       </div>
       <div className="app-notes-container">
-        <div className="app-note-item"></div>
+        <FetchAllNotes />
       </div>
     </div>
   );
