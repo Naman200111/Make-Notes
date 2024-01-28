@@ -7,7 +7,7 @@ export const addNotesInDb = async (
   setLoading
 ) => {
   try {
-    // setLoading(true);
+    setLoading(true);
     const response = await fetch(`http://localhost:4000/api${ADD_NOTES}`, {
       method: "POST",
       headers: {
@@ -18,18 +18,18 @@ export const addNotesInDb = async (
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
     }
-    getAllNotesfromDB(setNotes, setError);
+    getAllNotesfromDB(setNotes, setError, setLoading);
   } catch (error) {
     console.log(error, " in adding notes");
     alert("Error in adding note, please try again later" + error);
   } finally {
-    // setLoading(false);
+    setLoading(false);
   }
 };
 
 export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
   try {
-    // setLoading(true);
+    setLoading(true);
     console.log("fetching");
     const response = await fetch(`http://localhost:4000/api${GET_NOTES}`, {
       method: "GET",
@@ -44,13 +44,13 @@ export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
     setError(error);
     alert("Error in fetching notes, please try again later" + error);
   } finally {
-    // setLoading(false);
+    setLoading(false);
   }
 };
 
 export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
   try {
-    // setLoading(true);
+    setLoading(true);
     const response = await fetch(`http://localhost:4000/api${DELETE_NOTES}`, {
       method: "POST",
       headers: {
@@ -61,12 +61,12 @@ export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
     }
-    getAllNotesfromDB(setNotes, setError);
+    getAllNotesfromDB(setNotes, setError, setLoading);
   } catch (error) {
     console.log(error);
     alert("Error in deleting note, please try again later " + error);
   } finally {
-    // setLoading(false);
+    setLoading(false);
   }
 };
 

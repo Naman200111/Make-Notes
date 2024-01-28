@@ -2,12 +2,13 @@ const { NotesModel } = require("../../database-models/notesModelSchema");
 
 const getNotesService = async (req, res) => {
   try {
-    const usertoken = "123";
-    // const notes = await NotesModel.find({
-    //   userToken: "123",
-    // }).lean();
+    const usertoken = "test";
+    const notes = await NotesModel.find({
+      userToken: usertoken,
+    }).lean();
     // const notes = await NotesModel.find().lean();
     // console.log(notes.notes, "notesfromDB");
+    // return res.status(200).send(notes[0].notes);
     return res.status(200).send([
       {
         text: "This is a note",
@@ -29,6 +30,7 @@ const addNotesService = async (req, res) => {
   const { makeNote, priority } = req.body;
   const userToken = "123";
   try {
+    // handle the case when no notes are present
     const addNote = await NotesModel.findOneAndUpdate(
       { userToken },
       { $push: { notes: { text: makeNote, priority } } },
