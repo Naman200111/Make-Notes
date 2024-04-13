@@ -13,21 +13,21 @@ const NoteSchema = new Schema({
 
 const notesSchema = new Schema(
   {
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    userToken: {
-      type: String,
-      required: true,
-    },
+    // email: {
+    //   type: String,
+    //   required: true,
+    // },
+    // password: {
+    //   type: String,
+    //   required: true,
+    // },
+    // userToken: {
+    //   type: String,
+    //   required: true,
+    // },
     notes: [NoteSchema],
   },
   { timestamps: true }
 );
 
-module.exports.NotesModel = model("MakeNotes", notesSchema);
+module.exports.NotesModel = model("MakeNotes", notesSchema, "MakeNotes");

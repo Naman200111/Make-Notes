@@ -1,4 +1,4 @@
-import { ADD_NOTES, GET_NOTES, DELETE_NOTES } from "./api/routes";
+import { ADD_NOTES, GET_NOTES, DELETE_NOTES, EDIT_NOTES } from "./api/routes";
 export const addNotesInDb = async (
   makeNote,
   priority,
@@ -70,16 +70,30 @@ export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
   }
 };
 
-export const editNoteInDB = async (id, setNotes, setError, setLoading) => {
-  // try {
-  //   await fetch(`http://localhost:4000/api${EDIT_NOTES}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ id }),
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  // }
+export const editNoteInDB = async (
+  id,
+  setNotes,
+  setError,
+  setLoading,
+  newPriority,
+  newNote
+) => {
+  try {
+    const response = await fetch(`http://localhost:4000/api${EDIT_NOTES}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, newPriority, newNote }),
+    });
+    if (!response.ok) {
+      throw Error("HTTP Error " + response.status);
+    }
+    getAllNotesfromDB(setNotes, setError, setLoading);
+  } catch (error) {
+    console.log(error);
+    alert("Error in editing note, please try again later " + error);
+  } finally {
+    setLoading(false);
+  }
 };

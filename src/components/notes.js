@@ -5,39 +5,80 @@ import { getAllNotesfromDB, deleteNotefromDB, editNoteInDB } from "../utils";
 import "./notes.css";
 
 const GetAllNotes = (props) => {
-  const { error, notes, setNotes, setError, loading, setLoading } = props;
+  const [inEditMode, setInEditMode] = useState();
+  const [editedText, setEditedText] = useState();
+  const selectRef = useRef(null);
+  const {
+    error,
+    notes,
+    setNotes,
+    setError,
+    loading,
+    setLoading,
+    handlePriorityChange,
+  } = props;
   if (error) {
     return <h3>Unable to load your notes</h3>;
   }
-  if (notes.length === 0 || loading) {
+  if (loading) {
     return <h3>Loading your notes...</h3>;
   }
-  const result = notes.map((note) => {
-    return (
-      <div className="app-note-item" key={note.id}>
-        <div className="app-note-item-text">{note.text}</div>
-        <div className="app-note-item-priority">{note.priority}</div>
-        <button
-          onClick={() =>
-            deleteNotefromDB(note.id, setNotes, setError, setLoading)
-          }
-        >
-          Delete
-        </button>
-        <button
-          onClick={() => editNoteInDB(note.id, setNotes, setError, setLoading)}
-        >
-          Edit
-        </button>
-      </div>
-    );
-  });
+  if (notes.length === 0) {
+    return <h3>No notes available</h3>;
+  }
+  const onClickEdit = (id, newPriority) => {
+    editNoteInDB(id, setNotes, setError, setLoading, newPriority, editedText);
+    setInEditMode();
+  };
+  const onSave = (id) => {
+    onClickEdit(id, selectRef.current.value);
+  };
+
+  const result = inEditMode ? (
+    <div className="edit-modal">
+      <h4>Edit</h4>
+      <p>New Note</p>
+      <input
+        type="text"
+        value={editedText}
+        onChange={(event) => setEditedText(event.target.value)}
+      />
+      <p>New Priority</p>
+      <select ref={selectRef} onChange={handlePriorityChange}>
+        <option value="P0">P0</option>
+        <option value="P1">P1</option>
+        <option value="P2">P2</option>
+      </select>
+      <button onClick={() => onSave(inEditMode)}>Save</button>
+      <button onClick={() => setInEditMode()}>Cancel</button>
+    </div>
+  ) : (
+    notes.map((note) => {
+      return (
+        <div className="app-note-item" key={note.id}>
+          <div className="app-note-item-text">{note.text}</div>
+
+          <div className="app-note-operations">
+            <div className="app-note-item-priority">{`[${note.priority}]`}</div>
+            <button
+              onClick={() =>
+                deleteNotefromDB(note.id, setNotes, setError, setLoading)
+              }
+            >
+              Delete
+            </button>
+            <button onClick={() => setInEditMode(note.id)}>Edit</button>
+          </div>
+        </div>
+      );
+    })
+  );
   return result;
 };
 
 const Notes = () => {
   const [makeNote, setMakeNote] = useState("");
-  const [priority, setPriority] = useState("p0");
+  const [priority, setPriority] = useState("P0");
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
@@ -77,9 +118,9 @@ const Notes = () => {
         />
         <div className="app-note-priority">
           <select ref={selectRef} onChange={handlePriorityChange}>
-            <option value="p0">P0</option>
-            <option value="p1">P1</option>
-            <option value="p2">P2</option>
+            <option value="P0">P0</option>
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
           </select>
         </div>
       </div>
@@ -91,6 +132,8 @@ const Notes = () => {
           error={error}
           loading={loading}
           setLoading={setLoading}
+          handlePriorityChange={handlePriorityChange}
+          selectRef={selectRef}
         />
       </div>
     </div>
