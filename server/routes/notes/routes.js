@@ -7,7 +7,7 @@ const {
   addNotesService,
 } = require("./services");
 
-router.get("/getNotes", getNotesService);
+router.post("/getNotes", getNotesService);
 router.post("/deleteNotes", deleteNotesService);
 router.post("/editNotes", editNotesService);
 router.post("/addNotes", addNotesService);

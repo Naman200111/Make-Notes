@@ -1,4 +1,8 @@
-import { ADD_NOTES, GET_NOTES, DELETE_NOTES, EDIT_NOTES } from "./api/routes";
+import { ADD_NOTES, GET_NOTES, DELETE_NOTES, EDIT_NOTES, LOGIN, SIGNUP } from "./api/routes";
+
+const credentials = localStorage.getItem("credentials");
+const { email } = JSON.parse(credentials);
+
 export const addNotesInDb = async (
   makeNote,
   priority,
@@ -13,7 +17,7 @@ export const addNotesInDb = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ makeNote, priority }),
+      body: JSON.stringify({ makeNote, priority, email }),
     });
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
@@ -32,7 +36,11 @@ export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
     setLoading(true);
     console.log("fetching");
     const response = await fetch(`http://localhost:4000/api${GET_NOTES}`, {
-      method: "GET",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
     });
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
@@ -56,7 +64,7 @@ export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, email }),
     });
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
@@ -84,7 +92,7 @@ export const editNoteInDB = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, newPriority, newNote }),
+      body: JSON.stringify({ id, newPriority, newNote, email }),
     });
     if (!response.ok) {
       throw Error("HTTP Error " + response.status);
@@ -95,5 +103,60 @@ export const editNoteInDB = async (
     alert("Error in editing note, please try again later " + error);
   } finally {
     setLoading(false);
+  }
+};
+
+export const login = async (
+  email,
+  password,
+  navigate
+) => {
+  try {
+    const response = await fetch(`http://localhost:4000/api${LOGIN}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      throw Error("HTTP Error " + response.status);
+    }
+
+    navigate("/");
+    localStorage.setItem("isLoggedIn", true);
+    localStorage.setItem("credentials", JSON.stringify({ email, password }));
+  } catch (error) {
+    console.log(error);
+    alert("Error in loggin in, please try again later " + error);
+  } finally {
+    // setLoading(false);
+  }
+};
+
+export const signup = async (
+  name,
+  email,
+  password,
+  navigate
+) => {
+  try {
+    const response = await fetch(`http://localhost:4000/api${SIGNUP}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+    if (!response.ok) {
+      throw Error("HTTP Error " + response.status);
+    }
+    
+    navigate("/login");
+  } catch (error) {
+    console.log(error);
+    alert("Error in signing up, please try again later " + error);
+  } finally {
+    // setLoading(false);
   }
 };

@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const authenticationRouter = require("./routes/authentication/routes");
 const notesRouter = require("./routes/notes/routes");
 
 dotenv.config();
@@ -18,6 +19,7 @@ mongoose
   .then(() => console.log("Successfully Connected to mongo database"))
   .catch((error) => console.log("Error connecting to db" + error));
 
+app.use("/api", authenticationRouter)
 app.use("/api/notes", notesRouter);
 
 app.listen(port, () => {

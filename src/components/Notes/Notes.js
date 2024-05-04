@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
-import { addNotesInDb } from "../utils";
-import { getAllNotesfromDB, deleteNotefromDB, editNoteInDB } from "../utils";
-import "./notes.css";
+import { addNotesInDb } from "../../utils";
+import { getAllNotesfromDB, deleteNotefromDB, editNoteInDB } from "../../utils";
+import { useNavigate } from "react-router-dom";
+import "./Notes.css";
 
 const GetAllNotes = (props) => {
   const [inEditMode, setInEditMode] = useState();
@@ -83,7 +84,7 @@ const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
   const selectRef = useRef(null);
-  console.log("rendering notes component", notes, error);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setMakeNote(event.target.value);
@@ -100,9 +101,18 @@ const Notes = () => {
     setPriority(selectRef.current.value);
   };
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
   useEffect(() => {
     getAllNotesfromDB(setNotes, setError, setLoading);
   }, []);
+
+  if (!localStorage.getItem("isLoggedIn")) {
+    navigate("/login");
+  }
 
   return (
     <div className="app">
@@ -136,6 +146,7 @@ const Notes = () => {
           selectRef={selectRef}
         />
       </div>
+      <button className="logout-btn" onClick={handleLogOut}>LogOut</button>
     </div>
   );
 };

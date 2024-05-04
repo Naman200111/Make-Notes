@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Rubik&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    user-select: none;
+    background-color: #5fb0cb;
+}
+
+.signup {
+    padding: 3em;
+    max-width: 560px;
+}
+
+.form-element {
+    margin-top: 2em;
+    padding: 1em;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    background: floralwhite;
+    box-sizing: border-box;
+}
+
+.signup-btns{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.signup-btn {
+    padding: .5em;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 25%;
+    margin: 4em 0px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    background-color: black;
+    color: white;
+    transition-duration: .2s;
+}

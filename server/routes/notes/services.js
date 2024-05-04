@@ -2,8 +2,8 @@ const { NotesModel } = require("../../database-models/notesModelSchema");
 
 const getNotesService = async (req, res) => {
   try {
-    // const usertoken = "test";
-    const notes = await NotesModel.find({}).lean();
+    const { email } = req.body;
+    const notes = await NotesModel.find({ email }).lean();
     const finalNotes =
       notes[0] &&
       notes[0].notes.map((note) => {
@@ -20,15 +20,14 @@ const getNotesService = async (req, res) => {
 };
 
 const addNotesService = async (req, res) => {
-  const { makeNote, priority } = req.body;
-  // const userToken = "123";
+  const { makeNote, priority, email } = req.body;
   try {
-    const existingNodesDocument = await NotesModel.findOne({});
+    const existingNodesDocument = await NotesModel.findOne({ email });
     if (!existingNodesDocument) {
-      await NotesModel.create({ notes: [{ text: makeNote, priority }] });
+      throw error("User not found");
     } else {
       const addNote = await NotesModel.updateOne(
-        {},
+        { email },
         { $push: { notes: { text: makeNote, priority } } }
       );
     }
@@ -42,14 +41,13 @@ const addNotesService = async (req, res) => {
 };
 
 const deleteNotesService = async (req, res) => {
-  const { id } = req.body;
-  // const userToken = "123";
+  const { id, email } = req.body;
   try {
     const nullifyNote = await NotesModel.updateOne(
-      { "notes._id": id },
+      { email, "notes._id": id },
       { $unset: { [`notes.$`]: 1 } }
     );
-    const pullNote = await NotesModel.updateOne({}, { $pull: { notes: null } });
+    const pullNote = await NotesModel.updateOne({email}, { $pull: { notes: null } });
     return res.status(200).send({
       status: true,
       message: "Note deleted successfully",
@@ -60,11 +58,10 @@ const deleteNotesService = async (req, res) => {
 };
 
 const editNotesService = async (req, res) => {
-  const { id, newNote, newPriority } = req.body;
-  // const userToken = "123";
+  const { id, newNote, newPriority, email } = req.body;
   try {
     const editedNote = await NotesModel.updateOne(
-      { "notes._id": id },
+      { email, "notes._id": id },
       {
         $set: {
           [`notes.$.text`]: newNote,
