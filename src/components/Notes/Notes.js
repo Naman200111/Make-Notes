@@ -62,13 +62,14 @@ const GetAllNotes = (props) => {
           <div className="app-note-operations">
             <div className="app-note-item-priority">{`[${note.priority}]`}</div>
             <button
+              className="operation-btn"
               onClick={() =>
                 deleteNotefromDB(note.id, setNotes, setError, setLoading)
               }
             >
               Delete
             </button>
-            <button onClick={() => setInEditMode(note.id)}>Edit</button>
+            <button className="operation-btn" onClick={() => setInEditMode(note.id)}>Edit</button>
           </div>
         </div>
       );
@@ -89,6 +90,11 @@ const Notes = () => {
   const handleChange = (event) => {
     setMakeNote(event.target.value);
   };
+
+  const addNote = () => {
+    addNotesInDb(makeNote, priority, setNotes, setError, setLoading);
+    setMakeNote("");
+  }
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -134,6 +140,7 @@ const Notes = () => {
           </select>
         </div>
       </div>
+      <button className="add-btn" onClick={addNote}>Add</button>
       <div className="app-notes-container">
         <GetAllNotes
           notes={notes}

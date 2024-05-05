@@ -28,7 +28,9 @@ body{
     gap: .5em;
     align-items: center;
     margin: 2rem auto;
+    margin-bottom: 1rem;
     width: 30%;
+    justify-content: center;
 }
 
 .app-notes-container {
@@ -36,26 +38,64 @@ body{
     width: 30%;
 }
 
+.add-btn {
+    border-radius: 5px;
+    padding: .5em;
+    width: 5%;
+    border: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 370px) {
+    .app-note-item {
+        flex-direction: column;
+    }
+    .app-note-item-priority {
+        flex: 1;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .app-notes-container{
+        width: 80%;
+    }
+    .app-search-box{
+        width: 80%;
+    }
+    .add-btn{
+        width: 40%;
+    }
+}
+
 .app-note-item{
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
+    gap: .5em;
 }
 
 .app-note-operations{
     display: flex;
     gap: .5em;
+    align-items: center;
 }
 
 .app-search-input{
     flex-grow: 1;
     font-family: 'Inter', sans-serif;
-
+    padding: .5em;
 }
 
-.app-note-priority select option{
-    /* font-family: 'Inter', sans-serif;
-    height: 5em; */
+.app-note-priority select {
+    padding: .5em;
+}
+
+.operation-btn {
+    padding: .5em;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+
 }
 
 .logout-btn {

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { login } from "../../utils";
@@ -7,10 +7,13 @@ const Login = () => {
     const navigate = useNavigate();
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+
+    const [emailError, setEmailError] = useState();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     const handleLogin = () => {
         if (!emailRegex.test(emailRef.current.value)) {
-            alert('Invalid email id value');
+            setEmailError('Enter valid email id');
             return;
         }
         login(emailRef.current.value, passwordRef.current.value, navigate);
@@ -25,6 +28,7 @@ const Login = () => {
             <div className='form'>
                 <Form method="post" action="/notes">
                     <input ref={emailRef} className='form-element' type='text' placeholder='Email' />
+                    {emailError && <p className='errorText'>{emailError}</p>}
                     <input ref={passwordRef} className='form-element' type='password' placeholder='Password' />
                 </Form>
             </div>

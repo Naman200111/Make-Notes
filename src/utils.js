@@ -1,8 +1,5 @@
 import { ADD_NOTES, GET_NOTES, DELETE_NOTES, EDIT_NOTES, LOGIN, SIGNUP } from "./api/routes";
 
-const credentials = localStorage.getItem("credentials");
-const { email } = JSON.parse(credentials);
-
 export const addNotesInDb = async (
   makeNote,
   priority,
@@ -11,6 +8,8 @@ export const addNotesInDb = async (
   setLoading
 ) => {
   try {
+    const credentials = localStorage.getItem("credentials");
+    const { email } = JSON.parse(credentials || '{}');
     setLoading(true);
     const response = await fetch(`http://localhost:4000/api${ADD_NOTES}`, {
       method: "POST",
@@ -20,12 +19,11 @@ export const addNotesInDb = async (
       body: JSON.stringify({ makeNote, priority, email }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw "Failed to add a note";
     }
     getAllNotesfromDB(setNotes, setError, setLoading);
   } catch (error) {
-    console.log(error, " in adding notes");
-    alert("Error in adding note, please try again later" + error);
+    alert(error);
   } finally {
     setLoading(false);
   }
@@ -34,7 +32,8 @@ export const addNotesInDb = async (
 export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
   try {
     setLoading(true);
-    console.log("fetching");
+    const credentials = localStorage.getItem("credentials");
+    const { email } = JSON.parse(credentials || '{}');
     const response = await fetch(`http://localhost:4000/api${GET_NOTES}`, {
       method: "POST",
       headers: {
@@ -43,14 +42,13 @@ export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
       body: JSON.stringify({ email }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw "Failed to fetch notes";
     }
     const data = await response.json();
     setNotes(data);
   } catch (error) {
-    console.log(error, " in fetching notes");
     setError(error);
-    alert("Error in fetching notes, please try again later" + error);
+    alert(error);
   } finally {
     setLoading(false);
   }
@@ -58,6 +56,8 @@ export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
 
 export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
   try {
+    const credentials = localStorage.getItem("credentials");
+    const { email } = JSON.parse(credentials || '{}');
     setLoading(true);
     const response = await fetch(`http://localhost:4000/api${DELETE_NOTES}`, {
       method: "POST",
@@ -67,12 +67,11 @@ export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
       body: JSON.stringify({ id, email }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw "Failed to delete a note"
     }
     getAllNotesfromDB(setNotes, setError, setLoading);
   } catch (error) {
-    console.log(error);
-    alert("Error in deleting note, please try again later " + error);
+    alert(error);
   } finally {
     setLoading(false);
   }
@@ -87,6 +86,8 @@ export const editNoteInDB = async (
   newNote
 ) => {
   try {
+    const credentials = localStorage.getItem("credentials");
+    const { email } = JSON.parse(credentials || '{}');
     const response = await fetch(`http://localhost:4000/api${EDIT_NOTES}`, {
       method: "POST",
       headers: {
@@ -95,12 +96,11 @@ export const editNoteInDB = async (
       body: JSON.stringify({ id, newPriority, newNote, email }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw "Failed to edit a note"
     }
     getAllNotesfromDB(setNotes, setError, setLoading);
   } catch (error) {
-    console.log(error);
-    alert("Error in editing note, please try again later " + error);
+    alert(error);
   } finally {
     setLoading(false);
   }
@@ -120,17 +120,14 @@ export const login = async (
       body: JSON.stringify({ email, password }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw "Login Failed"
     }
 
     navigate("/");
     localStorage.setItem("isLoggedIn", true);
     localStorage.setItem("credentials", JSON.stringify({ email, password }));
   } catch (error) {
-    console.log(error);
-    alert("Error in loggin in, please try again later " + error);
-  } finally {
-    // setLoading(false);
+    alert(error);
   }
 };
 
@@ -149,14 +146,11 @@ export const signup = async (
       body: JSON.stringify({ name, email, password }),
     });
     if (!response.ok) {
-      throw Error("HTTP Error " + response.status);
+      throw ("Sign up failed");
     }
     
     navigate("/login");
   } catch (error) {
-    console.log(error);
-    alert("Error in signing up, please try again later " + error);
-  } finally {
-    // setLoading(false);
+    alert(error);
   }
 };

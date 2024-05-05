@@ -36,7 +36,7 @@ const addNotesService = async (req, res) => {
       message: "Note added successfully",
     });
   } catch (error) {
-    return res.status(500).send("Cannot add note: " + error);
+    return res.status(500).send(error);
   }
 };
 
@@ -53,7 +53,7 @@ const deleteNotesService = async (req, res) => {
       message: "Note deleted successfully",
     });
   } catch (error) {
-    return res.status(500).send("Unable to delete note: " + error);
+    return res.status(500).send(error);
   }
 };
 
@@ -74,7 +74,7 @@ const editNotesService = async (req, res) => {
       message: "Note edited successfully",
     });
   } catch (error) {
-    return res.status(500).send("Unable to edit note: " + error);
+    return res.status(500).send(error);
   }
 };
 

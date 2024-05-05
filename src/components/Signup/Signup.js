@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
 import './Signup.css';
 import { signup } from "../../utils";
@@ -9,14 +9,18 @@ const SignUp = () => {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+
+    const [pwdError, setPwdError] = useState();
+    const [emailError, setEmailError] = useState();
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleSignUp = () => {
-        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-            alert('Passwords do not match');
+        if (!emailRegex.test(emailRef.current.value)) {
+            setEmailError('Enter valid email id');
             return;
         }
-        if (!emailRegex.test(emailRef.current.value)) {
-            alert('Invalid email id value');
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            setPwdError('Passwords do not match');
             return;
         }
         signup(nameRef.current.value, emailRef.current.value, passwordRef.current.value, navigate);
@@ -31,8 +35,10 @@ const SignUp = () => {
                 <Form method="post">
                     <input ref={nameRef} className='form-element' type='text' placeholder='Name' required />
                     <input ref={emailRef} className='form-element' type='text' placeholder='Email' required />
+                    {emailError && <p className='errorText'>{emailError}</p>}
                     <input ref={passwordRef} className='form-element' type='password' placeholder='Password' required />
                     <input ref={confirmPasswordRef} className='form-element' type='password' placeholder='Confirm Password' required />
+                    {pwdError && <p className='errorText'>{pwdError}</p>}
                 </Form>
             </div>
             <div className='signup-btns'>
