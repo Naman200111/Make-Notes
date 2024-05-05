@@ -11,7 +11,7 @@ export const addNotesInDb = async (
     const credentials = localStorage.getItem("credentials");
     const { email } = JSON.parse(credentials || '{}');
     setLoading(true);
-    const response = await fetch(`http://localhost:4000/api${ADD_NOTES}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${ADD_NOTES}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ export const getAllNotesfromDB = async (setNotes, setError, setLoading) => {
     setLoading(true);
     const credentials = localStorage.getItem("credentials");
     const { email } = JSON.parse(credentials || '{}');
-    const response = await fetch(`http://localhost:4000/api${GET_NOTES}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${GET_NOTES}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const deleteNotefromDB = async (id, setNotes, setError, setLoading) => {
     const credentials = localStorage.getItem("credentials");
     const { email } = JSON.parse(credentials || '{}');
     setLoading(true);
-    const response = await fetch(`http://localhost:4000/api${DELETE_NOTES}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${DELETE_NOTES}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const editNoteInDB = async (
   try {
     const credentials = localStorage.getItem("credentials");
     const { email } = JSON.parse(credentials || '{}');
-    const response = await fetch(`http://localhost:4000/api${EDIT_NOTES}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${EDIT_NOTES}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -112,7 +112,7 @@ export const login = async (
   navigate
 ) => {
   try {
-    const response = await fetch(`http://localhost:4000/api${LOGIN}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${LOGIN}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -138,7 +138,7 @@ export const signup = async (
   navigate
 ) => {
   try {
-    const response = await fetch(`http://localhost:4000/api${SIGNUP}`, {
+    const response = await fetch(`https://make-notes-4y0q.onrender.com/api${SIGNUP}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
